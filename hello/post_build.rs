@@ -1,8 +1,9 @@
 use std::{
     env::var,
-    fs::OpenOptions,
+    fs::{OpenOptions, File},
     io::{
         BufRead as _,
+        Error,
         BufReader,
         Read as _,
         Result as IoResult,
@@ -226,6 +227,10 @@ fn main() {
     if var("OUTPUT_MODE").as_deref() == Ok("stdout") {
         println!("{}", wasm_b64);
         eprintln!("Written to stdout. Please copy the output.");
+    } else if var("OUTPUT_MODE").as_deref() == Ok("viteburner") {
+        let path = "../src/".to_owned()+&crate_name+".js";
+        let mut output = File::create(path).unwrap();
+        write!(output, "{}", wasm_b64).unwrap();
     }
     else {
         post_to_websocket(&*wasm_b64, 7953, &*crate_name);
