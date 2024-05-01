@@ -70,8 +70,13 @@ function cast_botnet(ns, con) {
     let botnet = "dynamic-hack.js";
     let maxRam = ns.getServerMaxRam(con);
     let requiredRam = ns.getScriptRam(botnet, "home");
-    let numThreads = Math.trunc(maxRam / requiredRam);
-    ns.scp(botnet, con);
-    ns.killall(con);
-    ns.exec(botnet, con, numThreads);
+    let numThreads = 0;
+    if (requiredRam) {
+        numThreads = Math.trunc(maxRam / requiredRam);
+    }
+    if (numThreads) {
+        ns.scp(botnet, con);
+        ns.killall(con);
+        ns.exec(botnet, con, numThreads);
+    }
 }
