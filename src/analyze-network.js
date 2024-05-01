@@ -6,7 +6,6 @@ export async function main(ns) {
       maxdepth: ns.args[0] || 4,
       maxlevel: 3,
     };
-  
     // delete old level files
     for (let i = 0; i <= 5; i++) {
       ns.rm("level"+i+"servers.txt");
