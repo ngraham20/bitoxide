@@ -67,11 +67,11 @@ export async function main(ns) {
 }
 /** @param {NS} ns */
 function cast_botnet(ns, con) {
-  let botnet = "dynamic-hack.js";
-  let maxRam = ns.getServerMaxRam(con);
-  let requiredRam = ns.getScriptRam(botnet, "home");
-  let numThreads = Math.trunc(maxRam / requiredRam);
-  ns.scp(botnet, con);
-  ns.killall(con);
-  ns.exec(botnet, con, numThreads);
+    let botnet = "dynamic-hack.js";
+    let maxRam = ns.getServerMaxRam(con);
+    let requiredRam = ns.getScriptRam(botnet, "home");
+    let numThreads = Math.trunc(maxRam / requiredRam);
+    ns.scp(botnet, con);
+    ns.killall(con);
+    ns.exec(botnet, con, numThreads);
 }
