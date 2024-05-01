@@ -7,6 +7,7 @@ export async function main(ns) {
     for (const con of lvl0connections) {
       if (con) {
         ns.tprint("Accessing: " + con);
+        cast_botnet(ns, con);
       }
     }
   
@@ -21,6 +22,8 @@ export async function main(ns) {
     for (const con of lvl1connections) {
       if (con) {
         ns.tprint("Accessing: " + con);
+        ns.BruteSSH(con);
+        cast_botnet(ns, con);
       }
     }
   
@@ -35,7 +38,15 @@ export async function main(ns) {
     for (const con of lvl2connections) {
       if (con) {
         ns.tprint("Accessing: " + con);
+        ns.BruteSSH(con);
+        ns.FTPCrack(con);
+        cast_botnet(ns, con);
       }
+    }
+
+    // Wait until we acquire the "BruteSSH.exe" program
+    while (!ns.fileExists("RelaySMTP.exe")) {
+      await ns.sleep(60000);
     }
   
     let lvl3 = ns.read("level3servers.txt");
@@ -43,6 +54,21 @@ export async function main(ns) {
     for (const con of lvl3connections) {
       if (con) {
         ns.tprint("Accessing: " + con);
+        ns.BruteSSH(con);
+        ns.FTPCrack(con);
+        ns.RelaySMTP(con);
+        cast_botnet(ns, con);
       }
     }
+  }
+  /** @param {NS} ns */
+  function cast_botnet(ns, con) {
+    let botnet = "dynamic-hack.js";
+    let maxRam = ns.getServerMaxRam(con);
+    let requiredRam = ns.getScriptRam(botnet, "home");
+    let numThreads = Math.trunc(maxRam / requiredRam);
+
+    ns.scp(botnet, con);
+    ns.killall(con);
+    ns.exec(botnet, con, numThreads);
   }
