@@ -1,12 +1,5 @@
 /** @param {NS} ns */
-export async function main(ns) {
-    // How much RAM each purchased server will have. In this case, it'll
-    // be 8GB.
-    const ram = 8;
-  
-    // Iterator we'll use for our loop
-    let i = ns.getPurchasedServers.length;
-  
+export async function main(ns) {  
     // Continuously try to purchase servers until we've reached the maximum
     // amount of servers
     while (i < ns.getPurchasedServerLimit()) {
@@ -24,4 +17,6 @@ export async function main(ns) {
       //Removing this line will cause an infinite loop and crash the game.
       await ns.sleep(1000);
     }
+
+    // while (ns.getServerMoneyAvailable("home") < ns.)
   }

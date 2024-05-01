@@ -4,13 +4,14 @@ export async function main(ns) {
         visited: ["home"],
         path: [{ "home": "home" }],
         maxdepth: ns.args[0] || 4,
-        maxlevel: 3,
+        maxlevel: 5,
     };
     // delete old level files
     for (let i = 0; i <= 5; i++) {
         ns.rm("level" + i + "servers.txt");
     }
-    // analyze(ns, context, "home", 0);
+    ns.rm("purchased-servers.txt");
+
     analyze(ns, context);
     ns.write("paths.txt", JSON.stringify(context.path), "w");
 }
@@ -26,6 +27,11 @@ function analyze(ns, ctx) {
         for (const [home, _] of Object.entries(homes)) {
             let connections = ns.scan(home);
             for (const con of connections) {
+                if (con.substring(0,5) == "pserv") {
+                    ns.tprint("Discovered: " + con);
+                    ns.write("purchased-servers.txt", con + "\n", "a");
+                    continue;
+                }
                 let lvl = ns.getServerNumPortsRequired(con);
                 if (!ctx.visited.includes(con)) {
                     ns.tprint("Discovered: " + con);
